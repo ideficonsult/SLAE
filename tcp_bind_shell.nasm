@@ -1,3 +1,4 @@
+;tcp bind shell
 global _start
 section .text
 _start:
